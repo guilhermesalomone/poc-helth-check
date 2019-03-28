@@ -30,18 +30,29 @@ Uma vez que esta dependência esteja no caminho de classe, vários pontos de extre
 
 /flyway - fornece detalhes sobre nossas migrações de banco de dados Flyway
 
->/health - resume o status de integridade de nosso aplicativo
->/heapdump - cria e retorna um dump de heap da JVM usada pelo nosso aplicativo
->/info - retorna informações gerais. Pode ser dados personalizados, informações de compilação ou detalhes sobre o último commit
->/liquibase - b ehaves like / flyway mas para Liquibase
->/logfile - retorna logs comuns de aplicativos
->/loggers - nos permite consultar e modificar o nível de log do nosso aplicativo
->/metrics - detalha as métricas do nosso aplicativo. Isso pode incluir métricas genéricas e personalizadas
->/prometheus - retorna métricas como a anterior, mas formatada para funcionar com um servidor Prometheus
->/scheduledtasks - fornece detalhes sobre cada tarefa agendada dentro do nosso aplicativo
->/sessions - lista sessões HTTP, uma vez que estamos usando o Spring Session
->/shutdown - executa um desligamento normal do aplicativo
->/threaddump - copia as informações do encadeamento da JVM subjacente
+/health - resume o status de integridade de nosso aplicativo
+
+/heapdump - cria e retorna um dump de heap da JVM usada pelo nosso aplicativo
+
+/info - retorna informações gerais. Pode ser dados personalizados, informações de compilação ou detalhes sobre o último commit
+
+/liquibase - b ehaves like / flyway mas para Liquibase
+
+/logfile - retorna logs comuns de aplicativos
+
+/loggers - nos permite consultar e modificar o nível de log do nosso aplicativo
+
+/metrics - detalha as métricas do nosso aplicativo. Isso pode incluir métricas genéricas e personalizadas
+
+/prometheus - retorna métricas como a anterior, mas formatada para funcionar com um servidor Prometheus
+
+/scheduledtasks - fornece detalhes sobre cada tarefa agendada dentro do nosso aplicativo
+
+/sessions - lista sessões HTTP, uma vez que estamos usando o Spring Session
+
+/shutdown - executa um desligamento normal do aplicativo
+
+/threaddump - copia as informações do encadeamento da JVM subjacente
 
 #### Micrometer
 
@@ -105,10 +116,11 @@ management:
 # Configuracao Health Check
 #
 ######################################################
-management.server.servlet.context-path= /management
+
+management.server.servlet.context-path: /management
 management.health.mail.enabled: false # When using the MailService, configure an SMTP server and set this to true
-management.endpoints.web.base-path: /
-management.endpoints.web.path-mapping.health: /management/health 
+management.endpoints.web.exposure.include: [metrics, info, health, beans, loggers]
+management.endpoints.web.base-path: /management
 	
 
 ```
@@ -127,23 +139,21 @@ management.endpoints.web.path-mapping.health: /management/health
  *
  */
 @Component
-public class HealthCheck implements HealthIndicator {
+public class HealthCheck implements ReactiveHealthIndicator  {
   
     @Override
-    public Health health() {
-        int errorCode = check(); // perform some specific health check
-        if (errorCode != 0) {
-            return Health.down()
-              .withDetail("Error Code", errorCode).build();
-        }
-        return Health.up().build();
+    public Mono<Health> health() {
+        return checkDownstreamServiceHealth().onErrorResume(
+          ex -> Mono.just(new Health.Builder().down(ex).build())
+        );
     }
-     
-    public int check() {
-        // Our logic to check health
-        return 0;
+ 
+    private Mono<Health> checkDownstreamServiceHealth() {
+        // we could use WebClient to check health reactively
+        return Mono.just(new Health.Builder().up().build());
     }
 }
+
 
 ```
 
