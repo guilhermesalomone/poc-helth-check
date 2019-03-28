@@ -18,12 +18,18 @@ Uma vez que esta dependência esteja no caminho de classe, vários pontos de extre
 
 ##### Pontos de extremidade predefinidos
 
->/auditevents - lista eventos relacionados à auditoria de segurança, como login / logout do usuário. Além disso, podemos filtrar por principal ou tipo entre outros campos
->/beans - retorna todos os beans disponíveis em nosso BeanFactory . Ao contrário de / auditevents , ele não suporta filtragem
->/conditions - anteriormente conhecido como / autoconfig , cria um relatório das condições de configuração automática
->/configprops - nos permite buscar todos os beans @ConfigurationProperties
->/env - retorna as propriedades atuais do ambiente. Além disso, podemos recuperar propriedades únicas
->/flyway - fornece detalhes sobre nossas migrações de banco de dados Flyway
+/auditevents - lista eventos relacionados à auditoria de segurança, como login/logout do usuário. Além disso, podemos filtrar por principal ou tipo entre outros campos
+
+/beans - retorna todos os beans disponíveis em nosso BeanFactory . Ao contrário de /auditevents , ele não suporta filtragem
+
+/conditions - anteriormente conhecido como /autoconfig , cria um relatório das condições de configuração automática
+
+/configprops - nos permite buscar todos os beans @ConfigurationProperties
+
+/env - retorna as propriedades atuais do ambiente. Além disso, podemos recuperar propriedades únicas
+
+/flyway - fornece detalhes sobre nossas migrações de banco de dados Flyway
+
 >/health - resume o status de integridade de nosso aplicativo
 >/heapdump - cria e retorna um dump de heap da JVM usada pelo nosso aplicativo
 >/info - retorna informações gerais. Pode ser dados personalizados, informações de compilação ou detalhes sobre o último commit
@@ -144,7 +150,7 @@ public class HealthCheck implements HealthIndicator {
 ## Referências  
 
 > https://www.baeldung.com/spring-boot-actuators
-	
+> https://www.baeldung.com/micrometer
 	
 
 	
