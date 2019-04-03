@@ -70,6 +70,13 @@ O Micrômetro agora faz parte das dependências do Atuador.
 ##### Adicionar a dependência no pom do projeto.
 
 ``` sh	
+
+
+<dependency>
+	<groupId>org.springframework</groupId>
+	<artifactId>spring-webflux</artifactId>
+</dependency>
+
 <dependency>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-actuator</artifactId>
